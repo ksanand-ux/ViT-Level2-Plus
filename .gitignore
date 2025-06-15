@@ -1,0 +1,5 @@
+vit-env/
+*.onnx
+__pycache__/
+*.log
+mlruns/
