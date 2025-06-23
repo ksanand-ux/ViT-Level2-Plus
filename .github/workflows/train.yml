@@ -25,15 +25,24 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run training with real data
+    - name: Set PYTHONPATH
+      run: |
+        echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
+
+
+    - name: Run ViT training
       run: |
         python train_vit.py \
           --train_dir vit-data/train \
           --val_dir vit-data/val \
-          --epochs 1
+          --epochs 1 \
+          --upload_to_s3 \
+          --s3_bucket e-see-vit-model
 
     - name: Run YOLOv8 training
       run: |
         python train_yolov8.py \
           --data yolo-data/data.yaml \
-          --epochs 1
+          --epochs 1 \
+          --upload_to_s3 \
+          --s3_bucket e-see-vit-model
