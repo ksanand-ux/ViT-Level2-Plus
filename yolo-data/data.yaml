@@ -1,0 +1,12 @@
+train: ../yolo-data/train/images
+val: ../yolo-data/val/images
+
+nc: 2
+names: ['cat', 'dog']
+
+roboflow:
+  workspace: ksanand
+  project: test-sang-zkwjv
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/ksanand/test-sang-zkwjv/dataset/1

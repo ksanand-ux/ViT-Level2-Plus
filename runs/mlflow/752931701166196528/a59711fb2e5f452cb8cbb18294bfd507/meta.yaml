@@ -1,0 +1,14 @@
+artifact_uri: /home/helloksanand86/vit-mlops/runs/mlflow/752931701166196528/a59711fb2e5f452cb8cbb18294bfd507/artifacts
+end_time: 1750429787308
+entry_point_name: ''
+experiment_id: '752931701166196528'
+lifecycle_stage: active
+run_id: a59711fb2e5f452cb8cbb18294bfd507
+run_name: yolov8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750429761404
+status: 3
+tags: []
+user_id: helloksanand86

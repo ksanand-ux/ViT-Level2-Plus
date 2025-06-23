@@ -1,0 +1,5 @@
+# Ignore bulky or unnecessary files during docker build
+runs/
+temp_inputs/
+vit-env/
+__pycache__/

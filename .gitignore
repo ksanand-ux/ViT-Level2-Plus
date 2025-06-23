@@ -1,5 +1,32 @@
-vit-env/
-*.onnx
+# Python cache
 __pycache__/
+*.py[cod]
+*.pyo
 *.log
+
+# Environments
+vit-env/
+venv/
+.env
+*.egg-info/
+
+# Model files
+*.pt
+*.onnx
+*.npy
+
+# MLflow
 mlruns/
+
+# Output folders
+outputs/*
+!outputs/.gitkeep
+
+metrics/*
+!metrics/.gitkeep
+
+# System/Editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
