@@ -31,6 +31,7 @@ def parse_args():
     parser.add_argument("--log_to_mlflow", action="store_true")
     parser.add_argument("--upload_to_s3", action="store_true")
     parser.add_argument("--s3_bucket", type=str, default="")
+    parser.add_argument("--dummy", action="store_true")
     return parser.parse_args()
 
 def safe_mkdir(path):
@@ -46,6 +47,10 @@ def upload_to_s3(file_path, bucket_name, s3_key):
 
 def main():
     args = parse_args()
+    if args.dummy: 
+     print(" Dummy training triggered via CI/CD. Skipping real training.")
+     return
+
     safe_mkdir(args.output_dir)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
