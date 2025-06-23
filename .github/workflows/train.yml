@@ -31,3 +31,9 @@ jobs:
           --train_dir vit-data/train \
           --val_dir vit-data/val \
           --epochs 1
+
+    - name: Run YOLOv8 training
+      run: |
+        python train_yolov8.py \
+          --data yolo-data/data.yaml \
+          --epochs 1
