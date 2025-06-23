@@ -25,6 +25,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run dummy training
+    - name: Run training with real data
       run: |
-        python train_vit.py --epochs 1 --dummy
+        python train_vit.py \
+          --train_dir vit-data/train \
+          --val_dir vit-data/val \
+          --epochs 1
