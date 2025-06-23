@@ -174,8 +174,9 @@ def main():
         if args.s3_bucket == "":
             print("[S3 ERROR] --s3_bucket is required when using --upload_to_s3")
         else:
-            upload_to_s3(model_path, args.s3_bucket, "vit-model/vit_model.pt")
-            upload_to_s3(metrics_path, args.s3_bucket, "vit-model/metrics.json")
+            version = "v1"
+            upload_to_s3(model_path, args.s3_bucket, f"vit/{version}/{model_path.name}")
+            upload_to_s3(metrics_path, args.s3_bucket, f"vit/{version}/{metrics_path.name}")
 
     print(f"[DONE] Model + metrics saved to: {args.output_dir}")
 
