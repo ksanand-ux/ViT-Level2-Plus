@@ -87,3 +87,4 @@ This project is part of a Level 2++ MLOps portfolio simulation, created for demo
 
 Last updated: 2025-06-23
 # Trigger upload
+# Trigger pipeline run
