@@ -175,10 +175,11 @@ def main():
             print("[S3 ERROR] --s3_bucket is required when using --upload_to_s3")
         else:
             version = "v1"
-            upload_to_s3(model_path, args.s3_bucket, f"vit/{version}/{model_path.name}")
-            upload_to_s3(metrics_path, args.s3_bucket, f"vit/{version}/{metrics_path.name}")
+            upload_to_s3(model_path, args.s3_bucket, f"vit/{version}/{Path(model_path).name}")
+            upload_to_s3(metrics_path, args.s3_bucket, f"vit/{version}/{Path(metrics_path).name}")
 
     print(f"[DONE] Model + metrics saved to: {args.output_dir}")
 
 if __name__ == "__main__":
     main()
+# Trigger pipeline
