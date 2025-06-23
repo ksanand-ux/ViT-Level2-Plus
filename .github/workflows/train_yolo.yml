@@ -3,9 +3,9 @@ name: Train YOLOv8 Model
 on:
   push:
     paths:
-      - 'train_yolov8.py'
+      - 'train_yolov8.py'                     # ✅ Your YOLOv8 training script
       - 'requirements.txt'
-      - '.github/workflows/train_yolo.yml'
+      - '.github/workflows/train_yolo.yml'    # ✅ This file itself
 
 jobs:
   train:
@@ -27,4 +27,6 @@ jobs:
 
     - name: Run YOLOv8 training
       run: |
-        python train_yolov8.py --epochs 1
+        python train_yolov8.py \
+          --data yolo-data/data.yaml \
+          --epochs 1
