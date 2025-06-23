@@ -1,86 +1,89 @@
-#  Vision Transformer + YOLOv8 MLOps Deployment (Level 2++)
+# Vision Transformer + YOLOv8 MLOps Deployment (Level 2++)
 
-This project simulates a **real-world MLOps pipeline** using both **image classification (ViT)** and **object detection (YOLOv8)** models. It includes:
+This repository simulates a real-world MLOps pipeline using both image classification (Vision Transformer via HuggingFace) and object detection (YOLOv8 via Ultralytics).
 
-- Modular training scripts
-- S3 + MLflow logging
-- FastAPI-based inference server
-- Docker Compose deployment
-- GitHub Actions CI/CD setup
-- Prometheus + Grafana monitoring
+It includes training, CI/CD, versioning, inference, observability, and monitoring in a production-style workflow.
 
 ---
 
-#  Features
+## Features
 
--  `train_vit.py` and `train_yolov8.py` with CLI support
--  MLflow tracking + optional S3 uploads
--  Inference via FastAPI `/predict_vit` and `/predict_yolo`
--  Docker Compose support for deployment
--  CI/CD pipeline using GitHub Actions
--  Monitoring with Prometheus + Grafana
--  Client CLI to send predictions to server
+- Modular training scripts: `train_vit.py`, `train_yolov8.py`
+- CLI arguments for training configs (epochs, directories, S3 upload)
+- FastAPI server with `/predict_vit` and `/predict_yolo` endpoints
+- Unified client script for inference requests
+- MLflow tracking with optional S3 model storage
+- Docker + Docker Compose setup
+- GitHub Actions CI/CD workflows for both models
+- Prometheus and Grafana integration for monitoring
 
 ---
 
-#  Folder Structure
-   .
-├── training/
-│ ├── train_vit.py
-│ └── train_yolov8.py
-├── inference/
-│ └── app.py
-├── client/
-│ └── client_predict.py
-├── outputs/ # ignored except .gitkeep
-├── metrics/ # confusion matrix, logs (ignored)
-├── models/ # optional mount point
-├── .github/workflows/ # CI/CD actions
-├── Dockerfile
+## Folder Structure
+
+.
+├── app/ # FastAPI inference server
+├── client/ # CLI for prediction
+├── data/, vit-data/, yolo-data/ # Datasets for classification and detection
+├── models/ # Saved models (ignored by Git)
+├── outputs/ # Logs and confusion matrices (ignored)
+├── .github/workflows/ # CI/CD workflow YAML files
+├── train_vit.py # Training script for ViT
+├── train_yolov8.py # Training script for YOLOv8
+├── predict_vit.py # Standalone ViT inference
+├── predict_yolov8.py # Standalone YOLOv8 inference
 ├── docker-compose.yml
-├── requirements.txt
+├── Dockerfile
 └── README.md
 
 ---
 
-# Quick Start
+## Quick Start
 
-# Train a model
+### Train a model
 
-python training/train_vit.py --epochs 1 --save_to_s3
-python training/train_yolov8.py --epochs 1 --save_to_s3
-
-# Start inference server
-uvicorn inference.app:app --host 0.0.0.0 --port 8000
-
-# Predict via CLI
-python client/client_predict.py --image dog.jpg
+python train_vit.py --train_dir vit-data/train --val_dir vit-data/val --epochs 1
+python train_yolov8.py --data yolo-data/data.yaml --epochs 1
 
 
-# Docker Compose
+### Start inference server
+
+uvicorn inference_server:app --host 0.0.0.0 --port 8000
+
+
+### Predict via CLI
+
+python client_predict.py --image dog.jpg
+
+
+### Docker Compose
+
 docker-compose up --build
 
-# API Docs
+
+### API Documentation
+
 http://localhost:8000/docs
 
-# Tech Stack
-ViT (HuggingFace)
 
-YOLOv8 (Ultralytics)
+---
 
-FastAPI
+## Tech Stack
 
-MLflow
+- Vision Transformer (HuggingFace Transformers)
+- YOLOv8 (Ultralytics)
+- FastAPI
+- MLflow
+- AWS S3
+- Docker and Docker Compose
+- GitHub Actions
+- Prometheus and Grafana
 
-S3 (AWS)
+---
 
-Docker + Compose
+## Notes
 
-GitHub Actions
+This project is part of a Level 2++ MLOps portfolio simulation, created for demonstration, teaching, and learning purposes. It closely mirrors production-grade pipelines and covers the full machine learning lifecycle, including training, deployment, monitoring, and automation.
 
-Prometheus + Grafana
-
-# Notes
-This is part of Level 2++ MLOps journey — built for portfolio, teaching, and learning purposes.
-It simulates a production pipeline and includes real-world tools from training to monitoring.
-
+Last updated: 2025-06-23
+# Trigger upload
