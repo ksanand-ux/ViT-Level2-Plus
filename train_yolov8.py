@@ -2,6 +2,7 @@ import argparse
 import os
 import shutil
 from ultralytics import YOLO
+from utils.s3_helper import upload_to_s3
 
 def main():
     # Argument parser
@@ -10,6 +11,9 @@ def main():
     parser.add_argument("--epochs", type=int, default=10, help="Number of epochs")
     parser.add_argument("--imgsz", type=int, default=640, help="Image size")
     parser.add_argument("--output_dir", type=str, default="runs", help="Output directory")
+    parser.add_argument("--upload_to_s3", action="store_true", help="Upload model to S3")
+    parser.add_argument("--s3_bucket", type=str, default="", help="S3 bucket name")
+
     args = parser.parse_args()
 
     # Load model
@@ -33,6 +37,15 @@ def main():
     saved_path = os.path.join(args.output_dir, "yolov8_best.pt")
     shutil.copy(best_model_path, saved_path)
     print(f"[MODEL SAVED] Model saved to {saved_path}")
+
+    # Optional S3 upload
+    if args.upload_to_s3:
+        if args.s3_bucket == "":
+            print("[S3 ERROR] --s3_bucket is required when using --upload_to_s3")
+        else:
+            version = "v1"
+            upload_to_s3(saved_path, args.s3_bucket, f"yolo/{version}/{os.path.basename(saved_path)}")
+
 
 if __name__ == "__main__":
     main()
