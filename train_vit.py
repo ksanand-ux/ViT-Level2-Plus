@@ -186,3 +186,4 @@ if __name__ == "__main__":
     main()
 # Trigger pipeline
 # Trigger ViT pipeline
+# Trigger pipeline
