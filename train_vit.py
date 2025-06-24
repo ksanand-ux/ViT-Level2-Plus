@@ -169,6 +169,15 @@ def main():
         mlflow.pytorch.log_model(model, artifact_path="model")
         mlflow.end_run()
 
+    # Check if AWS credentials are available
+    import os
+
+    print(" AWS_ACCESS_KEY_ID found:", "AWS_ACCESS_KEY_ID" in os.environ)
+    print(" AWS_SECRET_ACCESS_KEY found:", "AWS_SECRET_ACCESS_KEY" in os.environ)
+
+
+
+
     # Optional S3 upload
     if args.upload_to_s3:
         if args.s3_bucket == "":
@@ -191,3 +200,4 @@ if __name__ == "__main__":
 # retrigger
 # pipeline retrigger
 # retrigger Tue Jun 24 04:41:15 UTC 2025
+# retriggerr
