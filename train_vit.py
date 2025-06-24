@@ -170,7 +170,6 @@ def main():
         mlflow.end_run()
 
     # Check if AWS credentials are available
-    import os
 
     print(" AWS_ACCESS_KEY_ID found:", "AWS_ACCESS_KEY_ID" in os.environ)
     print(" AWS_SECRET_ACCESS_KEY found:", "AWS_SECRET_ACCESS_KEY" in os.environ)
