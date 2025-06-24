@@ -2,14 +2,18 @@ name: Train ViT Model
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'train_vit.py'
+      - 'utils/**'
       - 'requirements.txt'
       - '.github/workflows/train.yml'
 
 jobs:
   train:
     runs-on: ubuntu-latest
+
 
     steps:
     - name: Checkout code
@@ -32,6 +36,8 @@ jobs:
 
     - name: Run ViT training
       run: |
+        export AWS_ACCESS_KEY_ID=${{ secrets.AKIARI3LSUCSL6XTN7G3 }}
+        export AWS_SECRET_ACCESS_KEY=${{ secrets.Lacn9ztAUNPzf7mDBbk7hTDhJvzBm+AzU2ImaoIe }}
         python train_vit.py \
           --train_dir vit-data/train \
           --val_dir vit-data/val \
@@ -41,6 +47,8 @@ jobs:
 
     - name: Run YOLOv8 training
       run: |
+        export AWS_ACCESS_KEY_ID=${{ secrets.AKIARI3LSUCSL6XTN7G3 }}
+        export AWS_SECRET_ACCESS_KEY=${{ secrets.Lacn9ztAUNPzf7mDBbk7hTDhJvzBm+AzU2ImaoIe }}
         python train_yolov8.py \
           --data yolo-data/data.yaml \
           --epochs 1 \
