@@ -2,10 +2,13 @@ name: Train YOLOv8 Model
 
 on:
   push:
+       branches:
+        - main
     paths:
-      - 'train_yolov8.py'                     # ✅ Your YOLOv8 training script
+      - 'train_yolov8.py'
+      - 'utils/**'
       - 'requirements.txt'
-      - '.github/workflows/train_yolo.yml'    # ✅ This file itself
+      - '.github/workflows/train_yolo.yml'
 
 jobs:
   train:

@@ -1,12 +1,13 @@
 # predict_vit.py
+# predict_vit.py
 import argparse
 import json
 import os
 import torch
-from PIL import Image
+from PIL import Image, ImageDraw
 from torchvision import transforms
 from transformers import ViTForImageClassification, ViTFeatureExtractor, ViTConfig
-
+import datetime
 import boto3
 from botocore.exceptions import NoCredentialsError
 
@@ -63,6 +64,19 @@ def predict(args):
 
     print(f"\n🧠 Predicted Class: {label}")
     print(f"📊 Confidence: {confidence.item():.4f}")
+
+    # Save image with prediction text
+    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    output_dir = "outputs/vit_preds"
+    os.makedirs(output_dir, exist_ok=True)
+
+    original_img = Image.open(args.image_path).convert("RGB")
+    draw = ImageDraw.Draw(original_img)
+    draw.text((10, 10), f"Prediction: {label}", fill="red")
+
+    save_path = os.path.join(output_dir, f"vit_pred_{timestamp}.jpg")
+    original_img.save(save_path)
+    print(f"[🖼️ SAVED] Prediction visual saved to {save_path}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

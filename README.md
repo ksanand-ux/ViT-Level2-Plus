@@ -1,90 +1,116 @@
-# Vision Transformer + YOLOv8 MLOps Deployment (Level 2++)
+This repository simulates a real-world MLOps pipeline combining image classification (Vision Transformer via HuggingFace) and object detection (YOLOv8 via Ultralytics).
 
-This repository simulates a real-world MLOps pipeline using both image classification (Vision Transformer via HuggingFace) and object detection (YOLOv8 via Ultralytics).
+It covers full production-style automation: training, CI/CD, model versioning, inference APIs, centralized config, monitoring, and cloud model storage.
 
-It includes training, CI/CD, versioning, inference, observability, and monitoring in a production-style workflow.
+Features
+Modular training scripts for classification and detection
 
----
+train_vit.py, train_yolov8.py
 
-## Features
+CLI arguments for dataset paths, hyperparameters, and optional S3 upload
 
-- Modular training scripts: `train_vit.py`, `train_yolov8.py`
-- CLI arguments for training configs (epochs, directories, S3 upload)
-- FastAPI server with `/predict_vit` and `/predict_yolo` endpoints
-- Unified client script for inference requests
-- MLflow tracking with optional S3 model storage
-- Docker + Docker Compose setup
-- GitHub Actions CI/CD workflows for both models
-- Prometheus and Grafana integration for monitoring
+Unified FastAPI server with /predict_vit and /predict_yolo endpoints
 
----
+Docker Compose setup for API, Prometheus, and Grafana
 
-## Folder Structure
+Unified CLI prediction script with auto task detection
 
+MLflow tracking with S3 model upload
+
+GitHub Actions CI/CD pipelines for auto-training
+
+Prometheus metrics via /metrics endpoint
+
+Grafana dashboard support
+
+Centralized .env for config like SERVER_URL
+
+Folder Structure
+bash
+Copy
+Edit
 .
-├── app/ # FastAPI inference server
-├── client/ # CLI for prediction
-├── data/, vit-data/, yolo-data/ # Datasets for classification and detection
-├── models/ # Saved models (ignored by Git)
-├── outputs/ # Logs and confusion matrices (ignored)
-├── .github/workflows/ # CI/CD workflow YAML files
-├── train_vit.py # Training script for ViT
-├── train_yolov8.py # Training script for YOLOv8
-├── predict_vit.py # Standalone ViT inference
-├── predict_yolov8.py # Standalone YOLOv8 inference
-├── docker-compose.yml
-├── Dockerfile
+├── app/                  # FastAPI inference server
+├── client/               # CLI for predictions
+├── vit-data/, yolo-data/ # Sample datasets
+├── models/               # S3-uploaded model artifacts (ignored by Git)
+├── outputs/              # Prediction logs, metrics (ignored by Git)
+├── metrics/              # Confusion matrix, visual outputs (ignored)
+├── .github/workflows/    # GitHub Actions CI/CD YAMLs
+├── docker-compose.yml    # Docker Compose config
+├── prometheus.yml        # Prometheus scrape config
+├── requirements.txt
+├── .env                  # Centralized variables (ignored by Git)
+├── train_vit.py
+├── train_yolov8.py
+├── client_predict.py     # Unified prediction script
 └── README.md
-
----
-
-## Quick Start
-
-### Train a model
-
-python train_vit.py --train_dir vit-data/train --val_dir vit-data/val --epochs 1
-python train_yolov8.py --data yolo-data/data.yaml --epochs 1
-
-
-### Start inference server
-
+Quick Start
+1. Training
+bash
+Copy
+Edit
+python train_vit.py --train_dir vit-data/train --val_dir vit-data/val --epochs 1 --upload_s3 True
+python train_yolov8.py --data yolo-data/data.yaml --epochs 1 --upload_s3 True
+2. Inference (Locally)
+bash
+Copy
+Edit
 uvicorn inference_server:app --host 0.0.0.0 --port 8000
+Or via Docker:
 
-
-### Predict via CLI
-
-python client_predict.py --image dog.jpg
-
-
-### Docker Compose
-
+bash
+Copy
+Edit
 docker-compose up --build
+3. Prediction
+Edit .env:
 
+ini
+Copy
+Edit
+SERVER_URL=http://<EXTERNAL_IP>:8000
+Run:
 
-### API Documentation
+bash
+Copy
+Edit
+python client_predict.py --image dog.jpg
+Monitoring (Prometheus + Grafana)
+Visit http://<EXTERNAL_IP>:9090 for Prometheus UI
 
-http://localhost:8000/docs
+Visit http://<EXTERNAL_IP>:3000 for Grafana UI
 
+Prometheus scrapes /metrics from the FastAPI container
 
----
+Metrics include: request counts, durations, memory usage, etc.
 
-## Tech Stack
+CI/CD Automation
+GitHub Actions workflows (.github/workflows/) automatically:
 
-- Vision Transformer (HuggingFace Transformers)
-- YOLOv8 (Ultralytics)
-- FastAPI
-- MLflow
-- AWS S3
-- Docker and Docker Compose
-- GitHub Actions
-- Prometheus and Grafana
+Trigger training on push
 
----
+Upload model and metrics to S3
 
-## Notes
+Track runs via MLflow
 
-This project is part of a Level 2++ MLOps portfolio simulation, created for demonstration, teaching, and learning purposes. It closely mirrors production-grade pipelines and covers the full machine learning lifecycle, including training, deployment, monitoring, and automation.
+Ensure AWS credentials are set in GitHub Secrets:
 
-Last updated: 2025-06-23
-# Trigger upload
-# Trigger pipeline run
+nginx
+Copy
+Edit
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+API Reference
+Swagger UI: http://<EXTERNAL_IP>:8000/docs
+
+/predict_vit: Image classification
+
+/predict_yolo: Object detection
+
+/metrics: Prometheus scrape endpoint
+
+Notes
+This is a Level 2++ MLOps demonstration project with full training → deployment → monitoring cycle. It replicates industry best practices while remaining lightweight and educational.
+
+Last updated: 2025-06-26

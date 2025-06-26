@@ -1,5 +1,5 @@
-train: ../yolo-data/train/images
-val: ../yolo-data/val/images
+train: yolo-data/train/images
+val: yolo-data/val/images
 
 nc: 2
 names: ['cat', 'dog']

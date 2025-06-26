@@ -10,8 +10,8 @@ services:
       - ./outputs:/app/outputs
       - ~/.aws:/root/.aws:ro         # 👈 MOUNT YOUR AWS CREDENTIAL
     env_file:
-      - .env 
-    depends_on:
+      - .env
+ depends_on:
       - prometheus
 
   prometheus:

@@ -1,6 +1,6 @@
+import argparse
 import requests
 import os
-import argparse
 import json
 from dotenv import load_dotenv
 
@@ -32,13 +32,11 @@ def send_request(image_path, endpoint, save=False):
     print("\n=== PREDICTION RESULT ===")
     print(json.dumps(result, indent=2))
 
-    # Optional: Save response to outputs/
     if save:
-        os.makedirs("outputs/client", exist_ok=True)
-        task_label = "yolo" if "yolo" in endpoint else "vit"
-        output_path = f"outputs/client/result_{task_label}.json"
-        with open(output_path, "w") as jf:
-            json.dump(result, jf, indent=2)
+        output_path = f"outputs/prediction_response_{os.path.basename(image_path)}.json"
+        os.makedirs("outputs", exist_ok=True)
+        with open(output_path, "w") as f:
+            json.dump(result, f, indent=2)
         print(f"[INFO] Saved response JSON to {output_path}")
 
     return result

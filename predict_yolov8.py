@@ -1,5 +1,6 @@
 import argparse
 import os
+import datetime
 from ultralytics import YOLO
 from PIL import Image
 
@@ -8,9 +9,20 @@ def run_inference(model_path, image_path, save_dir):
     model = YOLO(model_path)
 
     print(f"[INFO] Running inference on {image_path}...")
-    results = model.predict(source=image_path, save=True, project=save_dir, name="inference")
+    results = model(image_path)  # returns list of results
 
-    print(f"[DONE] Inference complete. Results saved to {os.path.join(save_dir, 'inference')}")
+    # ⏳ Generate timestamped path
+    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    output_dir = os.path.join(save_dir, "yolo_preds")
+    os.makedirs(output_dir, exist_ok=True)
+    save_path = os.path.join(output_dir, f"yolo_output_{timestamp}.jpg")
+
+    # 💾 Save annotated image
+    result_image = results[0].plot()  # draw boxes on image
+    result_image = Image.fromarray(result_image)
+    result_image.save(save_path)
+
+    print(f"[🖼️ SAVED] YOLO prediction image saved to {save_path}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

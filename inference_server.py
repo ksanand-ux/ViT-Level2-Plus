@@ -15,6 +15,8 @@ import cv2
 import datetime
 
 app = FastAPI()
+# Add Prometheus instrumentation
+Instrumentator().instrument(app).expose(app)
 s3_client = boto3.client('s3')
 BUCKET_NAME = "e-see-vit-model"
 instrumentator = Instrumentator().instrument(app).expose(app)
