@@ -126,12 +126,12 @@ python client_predict.py vit-data/val/dog/dog9.jpg
 
 ### 📄 Swagger UI
 
-<img src="images/swagger.png" alt="Swagger Docs" width="700"/>
+<img src="https://e-see-vit-model.s3.amazonaws.com/screenshots/swagger.png" alt="Swagger Docs" width="700"/>
 
 
 ### 📈 Grafana Monitoring
 
-<img src="images/grafana.png" alt="Grafana Dashboard" width="700"/>
+<img src="https://e-see-vit-model.s3.amazonaws.com/screenshots/grafana.png" alt="Grafana Dashboard" width="700"/>
 
 Notes
 This is a Level 2++ MLOps demonstration project with full training → deployment → monitoring cycle. It replicates industry best practices while remaining
