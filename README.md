@@ -110,6 +110,30 @@ Swagger UI: http://<EXTERNAL_IP>:8000/docs
 
 /metrics: Prometheus scrape endpoint
 
+### 🧪 CLI Prediction Demo
+
+```bash
+python client_predict.py vit-data/val/dog/dog9.jpg
+
+[INFO] Using endpoint: /predict_vit
+
+=== PREDICTION RESULT ===
+{
+  "model": "ViT",
+  "predicted_class": "airplane",
+  "confidence": 0.6795
+}
+
+
+### 📄 Swagger UI
+
+![Swagger Docs](images/swagger.png)
+
+
+### 📈 Grafana Monitoring
+
+![Grafana Dashboard](images/grafana.png)
+
 Notes
 This is a Level 2++ MLOps demonstration project with full training → deployment → monitoring cycle. It replicates industry best practices while remaining lightweight and educational.
 
