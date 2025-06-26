@@ -112,7 +112,6 @@ Swagger UI: http://<EXTERNAL_IP>:8000/docs
 
 ### 🧪 CLI Prediction Demo
 
-```bash
 python client_predict.py vit-data/val/dog/dog9.jpg
 
 [INFO] Using endpoint: /predict_vit
