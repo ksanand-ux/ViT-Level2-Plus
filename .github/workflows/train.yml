@@ -14,7 +14,6 @@ jobs:
   train:
     runs-on: ubuntu-latest
 
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -46,12 +45,10 @@ jobs:
       run: |
         echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
 
-
     - name: Run ViT training
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
       run: |
         python train_vit.py \
           --train_dir vit-data/train \
@@ -64,10 +61,17 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
       run: |
         python train_yolov8.py \
           --data yolo-data/data.yaml \
           --epochs 1 \
           --upload_to_s3 \
           --s3_bucket e-see-vit-model
+
+    - name: Accuracy Check
+      run: |
+        accuracy=$(python -c "import train_vit; print(train_vit.final_accuracy())")  # Ensure the function returns accuracy
+        if (( $(echo "$accuracy < 0.80" | bc -l) )); then
+          echo "Accuracy below threshold, aborting push."
+          exit 1
+        fi
