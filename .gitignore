@@ -34,7 +34,22 @@ Thumbs.db
 # JSON/image results
 *.json
 *.jpg
-*.png
+#*.png
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Archives and compressed files
+*.tar.gz
+
+# Local virtual/test environments
+ge-fix-env/
+ge-test-env/
+gx/
+
+# Backup or saved files
+*.save
+
+# Terminal logs
+*.log
+
