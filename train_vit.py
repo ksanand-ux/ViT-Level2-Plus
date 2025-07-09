@@ -120,6 +120,20 @@ def main():
             mlflow.log_metric("train_loss", avg_loss, step=epoch)
             mlflow.log_metric("train_accuracy", accuracy, step=epoch)
 
+    def final_accuracy():
+        correct = 0
+        total = 0
+        with torch.no_grad():
+            for images, labels in val_loader:  # Using val_loader as validation data
+                images, labels = images.to(device), labels.to(device)
+                outputs = model(images).logits
+                _, predicted = torch.max(outputs, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+        accuracy = 100 * correct / total
+        return accuracy    
+
+
     # Validation
     model.eval()
     preds, targets = [], []
@@ -149,20 +163,11 @@ def main():
     plt.title("Confusion Matrix")
     plt.tight_layout()
     plt.savefig("confusion_matrix.png")
+    final_val_acc = final_accuracy()
+    print(f"[VAL] Final Accuracy (from function): {final_val_acc:.2f}%")
     print("[INFO] Confusion matrix saved as confusion_matrix.png")
+
     
-    def final_accuracy():
-    correct = 0
-    total = 0
-    with torch.no_grad():
-        for images, labels in val_loader:  # Using val_loader as validation data
-            images, labels = images.to(device), labels.to(device)
-            outputs = model(images).logits
-            _, predicted = torch.max(outputs, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-    accuracy = 100 * correct / total
-    return accuracy
 
     # Save metrics
 
