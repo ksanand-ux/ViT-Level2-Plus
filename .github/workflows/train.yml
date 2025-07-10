@@ -62,7 +62,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |      
-        aws s3 cp --recursive s3://e-see-vit-model/yolo-data/ ./yolo-data/ --no-progress  
+        aws s3 cp --recursive s3://e-see-vit-model/yolo-data/ ./yolo-data/ --no-progress
+        mv yolo-data/yolo-data/* yolo-data/
+        rm -r yolo-data/yolo-data 
 
     - name: Run YOLOv8 training
       env:
