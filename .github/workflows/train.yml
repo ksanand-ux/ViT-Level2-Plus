@@ -62,8 +62,19 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |      
-        aws s3 cp --recursive s3://e-see-vit-model/yolo-data/ ./yolo-data/ --no-progress
-        ls -R yolo-data/     
+        aws s3 cp --recursive s3://e-see-vit-model/yolo-data/ ./yolo-temp/ --no-progress
+        # Step 2: Check if nested yolo-data/ exists
+        if [ -d "./yolo-temp/yolo-data" ]; then
+          mv ./yolo-temp/yolo-data/* ./yolo-data/
+        else
+          mv ./yolo-temp/* ./yolo-data/
+        fi
+
+        # Step 3: Cleanup
+        rm -rf ./yolo-temp
+
+        # Step 4: Confirm structure
+        ls -R yolo-data/   
 
     - name: Run YOLOv8 training
       env:
