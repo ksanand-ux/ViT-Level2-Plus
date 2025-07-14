@@ -61,9 +61,11 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: |      
+      run: |
+        echo "[DEBUG] Current directory: $(pwd)"
         aws s3 cp --recursive s3://e-see-vit-model/yolo-data/ . --no-progress
-        ls -R yolo-data/ 
+        echo "[DEBUG] Tree structure after download:"
+        find yolo-data/ -type f 
 
     - name: Run YOLOv8 training
       env:
