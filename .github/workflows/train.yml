@@ -95,3 +95,5 @@ jobs:
         else
           echo "Accuracy $VAL_ACC passed the threshold $ACC_THRESHOLD"
         fi
+
+# Triggered to test new data.yaml structure
