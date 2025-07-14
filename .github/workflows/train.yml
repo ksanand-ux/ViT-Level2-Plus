@@ -62,10 +62,15 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
-        echo "[DEBUG] Current directory: $(pwd)"
-        aws s3 cp --recursive s3://e-see-vit-model/yolo-data/ . --no-progress
-        echo "[DEBUG] Tree structure after download:"
-        find yolo-data/ -type f 
+        echo "[INFO] Cleaning up any existing yolo-data folder..."
+        rm -rf yolo-data/
+        
+        echo "[INFO] Downloading dataset from S3 to ./yolo-data/"
+        mkdir -p yolo-data
+        aws s3 cp --recursive s3://e-see-vit-model/yolo-data/ yolo-data/ --no-progress
+    
+        echo "[INFO] Dataset contents:"
+        find yolo-data/ -type f
 
     - name: Run YOLOv8 training
       env:
