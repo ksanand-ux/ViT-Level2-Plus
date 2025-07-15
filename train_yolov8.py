@@ -3,6 +3,9 @@ import os
 import shutil
 from ultralytics import YOLO
 from utils.s3_helper import upload_to_s3
+import mlflow
+from mlflow import MlflowClient
+import json
 
 def main():
     # Argument parser
@@ -45,6 +48,47 @@ def main():
         else:
             version = "v1"
             upload_to_s3(saved_path, args.s3_bucket, f"yolo/{version}/{os.path.basename(saved_path)}")
+
+    # Set MLflow tracking URI
+    mlflow.set_tracking_uri("http://localhost:5000")
+    # Optional: group all YOLOv8 runs under one experiment
+    mlflow.set_experiment("YOLOv8")
+
+    # Convert local best.pt file path to MLflow URI
+    model_uri = f"file://{os.path.abspath(saved_path)}"
+
+    # Path to metrics.json (YOLOv8 saves it under runs/<name>/metrics.json)
+    metrics_path = os.path.join(args.output_dir, "yolov8", "metrics.json")
+    if not os.path.exists(metrics_path):
+        raise FileNotFoundError(f"[ERROR] Cannot find metrics.json at {metrics_path}")
+
+    # Load accuracy
+    with open(metrics_path, "r") as f:
+        metrics = json.load(f)
+
+    accuracy = metrics.get("metrics", {}).get("accuracy", None)
+    if accuracy is None:
+        raise ValueError("[ERROR] Accuracy not found in metrics.json")
+
+    print(f"[INFO] Validation accuracy from metrics.json: {accuracy}")
+
+    # Check threshold
+    if accuracy < 0.80:
+        print(f"[WARNING] Accuracy {accuracy} is below threshold 0.80 — skipping MLflow registration.")
+        return  # Skip remaining steps
+
+    # Register the model to MLflow
+    model_name = "YOLOv8_Model"
+    result = mlflow.register_model(model_uri=model_uri, name=model_name)
+
+    # Promote model to Staging
+    client = MlflowClient()
+    client.transition_model_version_stage(
+        name=model_name,
+        version=result.version,
+        stage="Staging"
+    )
+    print(f"[MLFLOW] Model registered and promoted to Staging: v{result.version}")
 
 
 if __name__ == "__main__":

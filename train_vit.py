@@ -187,6 +187,33 @@ def main():
         mlflow.pytorch.log_model(model, artifact_path="model")
         mlflow.end_run()
 
+        # -----------------------------
+    # MLflow Governance for ViT
+    # -----------------------------
+    mlflow.set_tracking_uri("http://localhost:5000")
+    mlflow.set_experiment("ViT")
+
+    # Accuracy gate
+    if acc < 0.80:
+        print(f"[MLFLOW] Accuracy {acc:.2f} is below 0.80 — skipping registration.")
+        return
+
+    # Convert to absolute path for MLflow URI
+    model_uri = f"file://{os.path.abspath(model_path)}"
+    model_name = "ViT_Model"
+
+    result = mlflow.register_model(model_uri=model_uri, name=model_name)
+
+    client = MlflowClient()
+    client.transition_model_version_stage(
+        name=model_name,
+        version=result.version,
+        stage="Staging"
+    )
+
+    print(f"[MLFLOW] ViT model registered and promoted to Staging: v{result.version}")
+
+
     # Check if AWS credentials are available
 
     print(" AWS_ACCESS_KEY_ID found:", "AWS_ACCESS_KEY_ID" in os.environ)

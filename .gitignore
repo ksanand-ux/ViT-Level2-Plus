@@ -53,3 +53,7 @@ gx/
 # Terminal logs
 *.log
 
+# YOLOv8 auto-generated outputs
+runs/
+*.png
+*.csv

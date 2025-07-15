@@ -26,9 +26,6 @@ Grafana dashboard support
 Centralized .env for config like SERVER_URL
 
 Folder Structure
-bash
-Copy
-Edit
 .
 ├── app/                  # FastAPI inference server
 ├── client/               # CLI for predictions
@@ -47,34 +44,19 @@ Edit
 └── README.md
 Quick Start
 1. Training
-bash
-Copy
-Edit
 python train_vit.py --train_dir vit-data/train --val_dir vit-data/val --epochs 1 --upload_s3 True
 python train_yolov8.py --data yolo-data/data.yaml --epochs 1 --upload_s3 True
 2. Inference (Locally)
-bash
-Copy
-Edit
 uvicorn inference_server:app --host 0.0.0.0 --port 8000
 Or via Docker:
 
-bash
-Copy
-Edit
 docker-compose up --build
 3. Prediction
 Edit .env:
 
-ini
-Copy
-Edit
 SERVER_URL=http://<EXTERNAL_IP>:8000
 Run:
 
-bash
-Copy
-Edit
 python client_predict.py --image dog.jpg
 Monitoring (Prometheus + Grafana)
 Visit http://<EXTERNAL_IP>:9090 for Prometheus UI
@@ -96,9 +78,6 @@ Track runs via MLflow
 
 Ensure AWS credentials are set in GitHub Secrets:
 
-nginx
-Copy
-Edit
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
 API Reference
@@ -132,6 +111,15 @@ python client_predict.py vit-data/val/dog/dog9.jpg
 ### 📈 Grafana Monitoring
 
 <img src="https://e-see-vit-model.s3.amazonaws.com/screenshots/grafana.png" alt="Grafana Dashboard" width="700"/>
+
+
+## 🔍 Notes & Known Issues
+
+- ✅ YOLOv8 pipeline completed successfully via CI.
+- ⚠️ Validation accuracy was **0.50**, which is below the enforced threshold of **0.80**.
+- 📉 This is expected due to limited training data.
+- 🔁 We plan to **retrain the model** with improved dataset quality and quantity in future iterations.
+
 
 Notes
 This is a Level 2++ MLOps demonstration project with full training → deployment → monitoring cycle. It replicates industry best practices while remaining
